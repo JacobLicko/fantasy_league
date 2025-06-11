@@ -1,0 +1,16 @@
+# Python artifacts
+*.py[cod]
+__pycache__/
+*.so
+
+# Virtualenv
+.venv/
+
+# Django stuff
+*.sqlite3
+media/
+staticfiles/
+
+# Editor configs
+.vscode/
+.idea/
