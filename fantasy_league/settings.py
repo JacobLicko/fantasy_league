@@ -75,8 +75,12 @@ WSGI_APPLICATION = "fantasy_league.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME":        os.getenv('DB_NAME', 'fantasy_db'),
+        "USER":        os.getenv('DB_USER', 'fantasy_user'),
+        "PASSWORD":    os.getenv('DB_PASSWORD', 'strongpassword'),
+        "HOST":        os.getenv('DB_HOST', 'localhost'),
+        "PORT":        os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -116,3 +120,11 @@ STATICFILES_DIRS = [ BASE_DIR / 'draft' / 'static' ]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_URL           = 'login'
+LOGIN_REDIRECT_URL = 'dashboard' # where to go after login
+LOGOUT_REDIRECT_URL = 'landing' # where to go after logout
+
+# Email setup for password resets
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'

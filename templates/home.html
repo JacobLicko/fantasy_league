@@ -12,23 +12,56 @@
     <button id="signupBtn" class="btn">Signup</button>
   </div>
 
+  <!-- LOGIN FORM -->
   <div id="forms">
     <div id="loginForm" class="form-container">
-      <form action="{% url 'dashboard' %}" method="get">
+      {% if login_form.non_field_errors %}
+        <div class="error-right">
+          {{ login_form.non_field_errors|join:" " }}
+        </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {{ login_form.non_field_errors }}
         <input type="text"  name="username"        placeholder="Username"       required>
         <input type="password" name="password"        placeholder="Password"       required>
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" name="login_submit" class="btn">Login</button>
       </form>
     </div>
 
+    <!-- SIGNUP FORM -->
     <div id="signupForm" class="form-container">
-      <form action="{% url 'dashboard' %}" method="get">
+      {% if signup_form.errors %}
+        <div class="error-right">
+          {# field-specific errors #}
+          {% for field in signup_form %}
+            {% for err in field.errors %}
+              {{ err }}<br>
+            {% endfor %}
+          {% endfor %}
+          {# non-field errors #}
+          {% for err in signup_form.non_field_errors %}
+            {{ err }}
+          {% endfor %}
+        </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
         <input type="email"    name="email"            placeholder="Email"              required>
         <input type="email"    name="email_confirm"    placeholder="Confirm Email"      required>
         <input type="text"     name="username"         placeholder="Username"           required>
-        <input type="password" name="password"         placeholder="Password"           required>
-        <input type="password" name="password_confirm" placeholder="Confirm Password"   required>
-        <button type="submit"  class="btn">Sign Up</button>
+        <div class="tooltip-container">
+          <input type="password" name="password1"         placeholder="Password"           required>
+          <span class="tooltip-text">
+            • At least 8 characters<br>
+            • 1 uppercase letter<br>
+            • 1 lowercase letter <br>
+            • 1 number <br>
+            • 1 special character <br>
+          </span>
+        </div>        
+        <input type="password" name="password2" placeholder="Confirm Password"   required>
+        <button type="submit"  name="signup_submit" id="signupSubmit" class="btn">Sign Up</button>
       </form>
     </div>
   </div>

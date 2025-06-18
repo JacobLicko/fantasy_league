@@ -9,7 +9,9 @@
 <body>
   <!-- top-left logout button -->
   <div style="position: absolute; top: 1rem; left: 1rem;">
-    <button class="btn">Logout</button>
+    <a href="{% url 'logout' %}">
+      <button class="btn">Logout</button>
+    </a>
   </div>
 
   <!-- center placeholder text -->

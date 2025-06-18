@@ -35,10 +35,12 @@
       overflow: hidden;
       transition: max-height 0.4s ease, opacity 0.4s ease;
       width: 300px;
+      position: relative;
     }
     .form-container.active {
       max-height: 500px;    /* big enough to show the form */
       opacity: 1;
+      overflow: visible;
     }
     form {
       display: flex;
@@ -49,9 +51,79 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     form input {
+      width: 100%;
+      box-sizing: border-box;
       margin-bottom: 1em;
       padding: 0.5em;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
+    /* Error message in forms */
+.error {
+  color: red;
+  margin-bottom: 1em;
+}
+
+.error-right {
+  position: absolute;
+  top: 2.0em;
+  right: -275px;
+  color: red;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+/* “Sign up now” link below the form */
+.signup-link {
+  color: blue;
+  text-decoration: underline;
+  display: inline-block;
+  margin-top: 1em;
+}
+
+/* Tooltip wrapper around an input */
+.tooltip-container {
+  position: relative;
+  display: block; /* shrink to its contents */
+  width: 100%;
+}
+
+/* Hidden tooltip text */
+.tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  border-radius: 4px;
+  padding: 0.5em;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;        /* sit above the input */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+/* Arrow below the tooltip */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;           /* at bottom of tooltip box */
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Show on hover */
+.tooltip-container:hover > .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}

@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="{% static 'draft/css/style.css' %}">
+</head>
+<body>
+  <div id="forms">
+    <!-- signup form active by default -->
+    <div id="signupForm" class="form-container active">
+      <h2> Signup </h2>
+      <form method="post" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <input type="email"    name="email"            placeholder="Email"           required>
+        <input type="email"    name="email_confirm"    placeholder="Confirm Email"   required>
+        <input type="text"     name="username"         placeholder="Username"        required>
+        <div class="tooltip-container">
+          <input type="password" name="password1" placeholder="Password" required>
+          <span class="tooltip-text">
+            • At least 8 characters<br>
+            • 1 uppercase letter<br>
+            • 1 lowercase letter <br>
+            • 1 number <br>
+            • 1 special character <br>
+          </span>
+        </div>
+        <input type="password" name="password2" placeholder="Confirm Password" required>
+        <button type="submit" class="btn" id="signupSubmit" disabled>Sign Up</button>
+      </form>
+      <p style="margin-top:1em;">
+        <a href="{% url 'login' %}" class="signup-link">
+          Already have an account? Log in.
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <script src="{% static 'draft/js/auth_toggle.js' %}"></script>
+</body>
+</html>
