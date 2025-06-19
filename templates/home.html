@@ -3,68 +3,146 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fantasy League</title>
+  <title>Home</title>
   <link rel="stylesheet" href="{% static 'draft/css/style.css' %}">
 </head>
 <body>
-  <div id="button-container">
-    <button id="loginBtn" class="btn">Login</button>
-    <button id="signupBtn" class="btn">Signup</button>
+  <!-- LOGOUT -->
+  <div class="logout-wrapper">
+    <a href="{% url 'logout' %}">
+      <button class="btn">Logout</button>
+    </a>
   </div>
 
-  <!-- LOGIN FORM -->
-  <div id="forms">
-    <div id="loginForm" class="form-container">
-      {% if login_form.non_field_errors %}
-        <div class="error-right">
-          {{ login_form.non_field_errors|join:" " }}
-        </div>
-      {% endif %}
-      <form method="post">
-        {% csrf_token %}
-        {{ login_form.non_field_errors }}
-        <input type="text"  name="username"        placeholder="Username"       required>
-        <input type="password" name="password"        placeholder="Password"       required>
-        <button type="submit" name="login_submit" class="btn">Login</button>
-      </form>
-    </div>
+  <div class="dashboard">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <button id="showLeaguesBtn"  class="btn sidebar-btn">My Leagues</button>
+      <button id="joinLeagueBtn"   class="btn sidebar-btn">Join League</button>
+      <button id="createLeagueBtn" class="btn sidebar-btn">Create League</button>
+    </aside>
 
-    <!-- SIGNUP FORM -->
-    <div id="signupForm" class="form-container">
-      {% if signup_form.errors %}
-        <div class="error-right">
-          {# field-specific errors #}
-          {% for field in signup_form %}
-            {% for err in field.errors %}
-              {{ err }}<br>
-            {% endfor %}
-          {% endfor %}
-          {# non-field errors #}
-          {% for err in signup_form.non_field_errors %}
-            {{ err }}
-          {% endfor %}
+    <!-- MAIN CONTENT -->
+    <section class="main-content">
+
+      <!-- My Leagues -->
+      <div id="myLeaguesContainer" class="form-container">
+        <div class="panel">
+          {% if leagues %}
+            <div class="league-container">
+              {% for league in leagues %}
+                <a href="{% url 'league_detail' league.code %}" class="league-box">
+                  {{ league.name }}
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>You’re not in any leagues yet.</p>
+          {% endif %}
         </div>
-      {% endif %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="email"    name="email"            placeholder="Email"              required>
-        <input type="email"    name="email_confirm"    placeholder="Confirm Email"      required>
-        <input type="text"     name="username"         placeholder="Username"           required>
-        <div class="tooltip-container">
-          <input type="password" name="password1"         placeholder="Password"           required>
-          <span class="tooltip-text">
-            • At least 8 characters<br>
-            • 1 uppercase letter<br>
-            • 1 lowercase letter <br>
-            • 1 number <br>
-            • 1 special character <br>
-          </span>
-        </div>        
-        <input type="password" name="password2" placeholder="Confirm Password"   required>
-        <button type="submit"  name="signup_submit" id="signupSubmit" class="btn">Sign Up</button>
-      </form>
-    </div>
+      </div>
+
+      <!-- Join League -->
+      <div id="joinLeagueContainer"
+           class="form-container{% if join_form.errors or join_success %} active{% endif %}">
+        <div class="panel">
+          <form method="post">
+            {% csrf_token %}
+            {{ join_form.code }}
+            {% if join_success %}
+              <div class="error" style="color:green; margin-top:0.5em;">
+                Joined successfully!
+              </div>
+            {% elif join_form.errors %}
+              <div class="error" style="margin-top:0.5em;">
+                {{ join_form.errors.code|join:" " }}
+              </div>
+            {% endif %}
+            <button type="submit"
+                    name="join_submit"
+                    class="btn"
+                    style="margin-top:1em; width:100%;">
+              Join
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Create League -->
+      <div id="createLeagueContainer"
+           class="form-container{% if create_form.errors or create_success %} active{% endif %}">
+        <div class="panel">
+          {% if create_success %}
+            <div class="error" style="color:green; margin-bottom:1em;">
+              League created successfully!
+            </div>
+          {% endif %}
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- Number of players -->
+            <div class="option-group">
+              <strong>Players:</strong>
+              <input type="radio" id="players2" name="max_players" value="2" required>
+              <label for="players2" class="option-box">2</label>
+
+              <input type="radio" id="players4" name="max_players" value="4">
+              <label for="players4" class="option-box">4</label>
+
+              <input type="radio" id="players6" name="max_players" value="6">
+              <label for="players6" class="option-box">6</label>
+
+              <input type="radio" id="players8" name="max_players" value="8">
+              <label for="players8" class="option-box">8</label>
+            </div>
+
+            <!-- League Name -->
+            <div style="margin-bottom:1em;">
+              <strong>League Name:</strong><br>
+              <input type="text" name="name" placeholder="Enter league name" required>
+            </div>
+
+            <!-- Draft Type -->
+            <div class="option-group">
+              <strong>Draft Type:</strong>
+              <input type="radio" id="draftSnake" name="draft_type" value="snake" required>
+              <label for="draftSnake" class="option-box">Snake</label>
+
+              <input type="radio" id="draftAuction" name="draft_type" value="auction" disabled>
+              <label for="draftAuction" class="option-box disabled">Auction</label>
+            </div>
+
+            <!-- Region -->
+            <div class="option-group">
+              <strong>Region:</strong>
+              <input type="radio" id="regionNACL" name="region" value="NACL" required checked>
+              <label for="regionNACL" class="option-box">NACL</label>
+            </div>
+
+            <!-- Draft Day -->
+            <div style="margin-bottom:1em;">
+              <strong>Draft Day:</strong><br>
+              <input type="date" name="draft_date" required>
+            </div>
+
+            <!-- Draft Time -->
+            <div style="margin-bottom:1em;">
+              <strong>Draft Time:</strong><br>
+              <input type="time" name="draft_time" required>
+            </div>
+
+            <button type="submit"
+                    name="create_submit"
+                    class="btn"
+                    style="margin-top:1.5em; width:100%;">
+              Create League
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
   </div>
-<script src="{% static 'draft/js/auth_toggle.js' %}"></script>
+
+  <script src="{% static 'draft/js/dashboard_toggle.js' %}"></script>
 </body>
 </html>

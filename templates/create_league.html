@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create League</title>
+  <link rel="stylesheet" href="{% static 'draft/css/style.css' %}">
+</head>
+<body>
+  <div style="position:absolute; top:1rem; left:1rem;">
+    <a href="{% url 'home' %}"><button class="btn">Back</button></a>
+  </div>
+
+  <div class="form-container active" style="max-width:500px; margin:2rem auto;">
+    <h2>Create a New League</h2>
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Players -->
+      <div class="option-group">
+        <strong>Players:</strong>
+        <input type="radio" id="players2" name="max_players" value="2" required>
+        <label for="players2" class="option-box">2</label>
+
+        <input type="radio" id="players4" name="max_players" value="4">
+        <label for="players4" class="option-box">4</label>
+
+        <input type="radio" id="players6" name="max_players" value="6">
+        <label for="players6" class="option-box">6</label>
+
+        <input type="radio" id="players8" name="max_players" value="8">
+        <label for="players8" class="option-box">8</label>
+      </div>
+
+      <!-- League Name -->
+      <div style="margin-bottom:1em;">
+        <strong>League Name:</strong><br>
+        <input type="text" name="name" placeholder="Enter league name" required>
+      </div>
+
+      <!-- Draft Type -->
+      <div class="option-group">
+        <strong>Draft Type:</strong>
+        <input type="radio" id="draftSnake" name="draft_type" value="snake" required>
+        <label for="draftSnake" class="option-box">Snake</label>
+
+        <input type="radio" id="draftAuction" name="draft_type" value="auction" disabled>
+        <label for="draftAuction" class="option-box disabled">Auction</label>
+      </div>
+
+      <!-- Region -->
+      <div class="option-group">
+        <strong>Region:</strong>
+        <input type="radio" id="regionNACL" name="region" value="NACL" required checked>
+        <label for="regionNACL" class="option-box">NACL</label>
+      </div>
+
+      <!-- Draft Day -->
+      <div style="margin-bottom:1em;">
+        <strong>Draft Day:</strong><br>
+        <input type="date" name="draft_date" required>
+      </div>
+
+      <!-- Draft Time -->
+      <div style="margin-bottom:1em;">
+        <strong>Draft Time:</strong><br>
+        <input type="time" name="draft_time" required>
+      </div>
+
+      <button type="submit" name="create_submit" class="btn">Create League</button>
+    </form>
+  </div>
+</body>
+</html>
