@@ -29,9 +29,9 @@ def landing(request):
 def home(request):
     leagues = request.user.leagues.all()
     join_form = JoinLeagueForm(request.POST or None)
-    join_success = False
+    join_active = False
     create_form = CreateLeagueForm(request.POST or None)
-    create_success = False
+    create_active = False
 
     # JOIN LEAGUE logic
     if request.method == 'POST' and 'join_submit' in request.POST:
@@ -39,6 +39,9 @@ def home(request):
             league = League.objects.get(code=join_form.cleaned_data['code'])
             league.members.add(request.user)
             join_success = True
+            return redirect('league_detail', code=league.code)
+        else:
+            join_active = True
 
     # CREATE LEAGUE logic
     if 'create_submit' in request.POST:
@@ -48,12 +51,15 @@ def home(request):
             league.save()
             league.members.add(request.user)
             return redirect('league_detail', code=league.code)
+        else:
+            create_active = True
 
     return render(request, 'home.html', {
         'leagues' : leagues,
         'join_form' : join_form,
-        'join_success' : join_success,
+        'join_active' : join_active,
         'create_form' : create_form,
+        'create_active' : create_active,
     })
 
 @login_required(login_url='landing')
@@ -79,4 +85,26 @@ def create_league(request):
 def league_detail(request,code):
     #only let members see their league
     league = get_object_or_404(League, code=code, members=request.user)
-    return render(request, 'league_detail.html', {'league': league})
+
+    # Build a fixed length slots list
+    members = list(league.members.all())
+    empty_slots = league.max_players - len(members)
+    slots = members + [None] * empty_slots
+
+    # Only Creator may save/delete
+    if request.method == 'POST' and league.creator == request.user:
+        # Save edits
+        if 'save_changes' in request.POST:
+            league.name = request.POST.get('name')
+            league.draft_type = request.POST.get('draft_type')
+            league.draft_date = request.POST.get('draft_date')
+            league.draft_time = request.POST.get('draft_time')
+            league.save()
+            return redirect('league_detail', code=league.code)
+        
+        # Confirm delete
+        if 'delete_confirm' in request.POST:
+            league.delete()
+            return redirect('home')
+
+    return render(request, 'league_detail.html', {'league': league, 'slots':slots})

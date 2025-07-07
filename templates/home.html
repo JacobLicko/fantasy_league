@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Home</title>
-  <link rel="stylesheet" href="{% static 'draft/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/dashboard.css' %}">
+
 </head>
 <body>
   <!-- LOGOUT -->
@@ -44,7 +47,7 @@
 
       <!-- Join League -->
       <div id="joinLeagueContainer"
-           class="form-container{% if join_form.errors or join_success %} active{% endif %}">
+           class="form-container{% if join_active %} active{% endif %}">
         <div class="panel">
           <form method="post">
             {% csrf_token %}
@@ -70,7 +73,7 @@
 
       <!-- Create League -->
       <div id="createLeagueContainer"
-           class="form-container{% if create_form.errors or create_success %} active{% endif %}">
+           class="form-container{% if create_active %} active{% endif %}">
         <div class="panel">
           {% if create_success %}
             <div class="error" style="color:green; margin-bottom:1em;">

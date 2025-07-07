@@ -4,30 +4,120 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ league.name }}</title>
-  <link rel="stylesheet" href="{% static 'draft/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/league.css' %}">
+  <link rel="stylesheet" href="{% static 'draft/css/dashboard.css' %}">
+
 </head>
 <body>
-    <!-- LOGOUT -->
+  <!-- Logout -->
   <div class="logout-wrapper">
-    <a href="{% url 'logout' %}">
-      <button class="btn">Logout</button>
-    </a>
-  </div>
-  
-  <div style="position:absolute; top:1rem; left:1rem;">
-    <a href="{% url 'home' %}"><button class="btn">Back to My Leagues</button></a>
+    <a href="{% url 'logout' %}"><button class="btn">Logout</button></a>
   </div>
 
-  <div style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: sans-serif;
-    font-size: 1.5rem;
-    color: #333;
-  ">
-    Placeholder for league “{{ league.name }}”
+  <!-- Back -->
+  <div style="position:absolute; top:1rem; left:1rem;">
+    <a href="{% url 'home' %}"><button class="btn">Back to Home</button></a>
   </div>
+
+  <!-- Draft Header -->
+  <div class="draft-header">
+    Draft Day: {{ league.draft_date|date:"M j, Y" }}
+    &nbsp; at &nbsp;
+    {{ league.draft_time|time:"g:i A" }}
+  </div>
+
+  <!-- Main Panels -->
+  <div class="league-detail-main">
+    <div class="left-col">
+      <!-- League Info (left) -->
+      <div class="info-panel">
+        <strong>{{ league.name }}</strong>
+        <p>Draft Type: {{ league.get_draft_type_display }}</p>
+        <p>Region: {{ league.region }}</p>
+
+        {% if user == league.creator %}
+          <button id="editLeagueBtn" class="btn">Edit League</button>
+        {% endif %}
+      </div>
+
+      <!-- Edit League Panel (hidden by default) -->
+      <div id="editLeagueContainer" class="edit-container">
+        <form method="post">
+          {% csrf_token %}
+          <h3>Edit League</h3>
+
+          <label>Name</label>
+          <input type="text" name="name" value="{{ league.name }}" required>
+
+          <label>Draft Type</label>
+          <select name="draft_type">
+            <option value="snake"  {% if league.draft_type == 'snake' %}selected{% endif %}>Snake</option>
+            <option value="auction" disabled>Auction (coming soon)</option>
+          </select>
+
+          <label>Draft Day</label>
+          <input type="date" name="draft_date" value="{{ league.draft_date|date:'Y-m-d' }}" required>
+
+          <label>Draft Time</label>
+          <input type="time" name="draft_time" value="{{ league.draft_time|time:'H:i' }}" required>
+
+          <div class="edit-buttons">
+            <button type="submit" name="delete_trigger" id="deleteLeagueTrigger"
+                    class="btn delete-btn">
+              Delete League
+            </button>
+            <button type="submit" name="save_changes" class="btn save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal (hidden) -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content panel">
+        <p>Are you sure you wish to delete this league? This cannot be undone.</p>
+        <form method="post">
+          {% csrf_token %}
+          <div class="modal-buttons">
+            <button type="submit" name="delete_confirm" class="btn delete-btn">
+              Delete
+            </button>
+            <button type="button" id="cancelDelete" class="btn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Begin Draft (center) -->
+    <div class="begin-btn-container">
+      <button
+        id="beginDraftBtn"
+        data-draft-datetime="{{ league.draft_date|date:'Y-m-d' }}T{{ league.draft_time|time:'H:i' }}"
+        disabled
+      >
+        Begin Draft
+      </button>
+    </div>
+
+    <!-- Slots (right) -->
+    <div class="slots-panel">
+      <strong style="display:block; margin-bottom:1em;">Current Players</strong>
+      {% for user in slots %}
+        <div class="slot">
+          {% if user %}
+            {{ user.username }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="{% static 'draft/js/league_detail.js' %}"></script>
 </body>
 </html>

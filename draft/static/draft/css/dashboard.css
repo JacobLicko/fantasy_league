@@ -1,0 +1,39 @@
+/* ==========================================================================
+   Dashboard Layout
+   ========================================================================== */
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+/* Logout button */
+.logout-wrapper {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+/* Sidebar (left nav) */
+.sidebar {
+  width: 180px;
+  padding: 2em 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.sidebar-btn {
+  width: 100%;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  position: relative;
+  padding: 2em;
+}
+
+/* Global form‐container override in the dashboard */
+.main-content .form-container {
+  top: 2em;    /* align under the sidebar padding */
+}

@@ -1,0 +1,43 @@
+/* ==========================================================================
+   Landing‐Page Centering
+   ========================================================================== */
+body.landing-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Buttons row */
+#button-container {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+/* Forms stack under buttons */
+#forms {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Only these form‐containers get the landing animations */
+#forms .form-container {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  width: 300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#forms .form-container.active {
+  max-height: 500px;
+  opacity: 1;
+  overflow: visible;
+}

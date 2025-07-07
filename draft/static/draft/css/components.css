@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Panel Wrapper (white cards)
+   ========================================================================== */
+.panel {
+  background: #fff;
+  padding: 1.5em;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+/* ==========================================================================
+   Global Form‐Container (for dashboard panels)
+   ========================================================================== */
+.form-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 600px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.form-container.active {
+  max-height: 500px;
+  opacity: 1;
+  overflow: visible;
+}
+
+/* ==========================================================================
+   Forms & Inputs
+   ========================================================================== */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1em;
+  padding: 0.5em;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Tooltip Styles
+   ========================================================================== */
+.tooltip-container {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  border-radius: 4px;
+  padding: 0.5em;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.tooltip-container:hover > .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Option Boxes (radio inputs as clickable boxes)
+   ========================================================================== */
+.option-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em;
+}
+
+.option-box {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + label.option-box {
+  background-color: #ddd;
+}
+
+.option-box.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   League List (scrollable vertical list)
+   ========================================================================== */
+.league-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+}
+
+.league-box {
+  flex: 0 0 auto;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+}
+
+.league-box:hover {
+  background-color: #f0f0f0;
+}
+
+/* ==========================================================================
+   Make “My Leagues” panel scrollable
+   ========================================================================== */
+#myLeaguesContainer .panel {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 1em;
+  box-sizing: border-box;
+}
