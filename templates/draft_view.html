@@ -1,0 +1,14 @@
+{% block title %}Draft – {{ league.name }}{% endblock %}
+
+{% block content %}
+  <div style="text-align:center; margin-top:4rem;">
+    <h1>Draft View</h1>
+    <p>Here’s where we’ll run the live draft!</p>
+  </div>
+  <form method="post" action="{% url 'reset_draft_session' league.code %}">
+  {% csrf_token %}
+  <button type="submit" class="btn" style="background:#dc3545; margin-top:1em;">
+    Reset Draft (testing only)
+  </button>
+</form>
+{% endblock %}

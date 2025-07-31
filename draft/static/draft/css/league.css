@@ -169,3 +169,13 @@
 .modal-buttons .btn {
   width: 45%;
 }
+
+#beginDraftBtn.gold {
+  background: goldenrod;
+  color: #fff;
+}
+
+.slots-panel .slot.ready { 
+  background-color: #d4ffd4;
+}
+

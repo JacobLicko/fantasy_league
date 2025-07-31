@@ -99,6 +99,8 @@
       <button
         id="beginDraftBtn"
         data-draft-datetime="{{ league.draft_date|date:'Y-m-d' }}T{{ league.draft_time|time:'H:i' }}"
+        data-league-code="{{ league.code }}"
+        data-current-user="{{ request.user.username }}"
         disabled
       >
         Begin Draft
@@ -109,7 +111,7 @@
     <div class="slots-panel">
       <strong style="display:block; margin-bottom:1em;">Current Players</strong>
       {% for user in slots %}
-        <div class="slot">
+        <div class="slot" {% if user %}data-username="{{ user.username }}"{% endif %}>
           {% if user %}
             {{ user.username }}
           {% endif %}

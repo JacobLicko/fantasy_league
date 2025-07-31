@@ -32,4 +32,9 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
     path('create-league/', views.create_league, name='create_league'),
     path('league/<str:code>/', views.league_detail, name='league_detail'),
+    path('league/<str:code>/start_draft/', views.start_draft_session, name='start_draft'),
+    path('league/<str:code>/draft_status/', views.draft_status, name='draft_status'),
+    path('league/<str:code>/draft/', views.draft_view, name='draft_view'),
+    # Delete the following one, for testing purposes
+    path('league/<str:code>/reset_started', views.reset_draft_session, name='reset_draft_session'),
 ]
